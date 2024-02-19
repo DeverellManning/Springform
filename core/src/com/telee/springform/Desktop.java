@@ -18,6 +18,9 @@ import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 
@@ -62,7 +65,7 @@ public class Desktop {
 		layers.put(LayerName.front, new Layer(LayerName.front));
 		
 		skyColor = Color.SKY;
-		gravity = 850;
+		gravity = -850;
 		paused = false;
 		
 		breakLoop = false;
@@ -137,7 +140,23 @@ public class Desktop {
 			Render.shape.setColor(Color.FIREBRICK.r, Color.FIREBRICK.g, Color.FIREBRICK.b, 0.5f);
 			Render.shape.rect(mx-32,my-32, 64, 64);
 		}
+		
+		if (Key.Down(Keys.S)) {
+			save();
+		}
 
+		
+	}
+	
+	static void save() {
+		Json json = new Json();
+		String jobjs = json.toJson(objs);
+		
+		Util.log(json.prettyPrint(jobjs));
+		
+		FileHandle dataDir = Gdx.files.external("./.local/share/springform");
+		
+		dataDir.child("save.json").writeString(jobjs, false);
 		
 	}
 	
@@ -170,10 +189,8 @@ public class Desktop {
 			String exec = "";
 			
 			String cont = String.valueOf(content.array());
-			//Util.log(cont);
 			
 			for (String l : cont.split("\n")) {
-				
 				if (l.startsWith("Exec=")) {
 					exec=l.replace("Exec=", "");
 					continue;
@@ -184,40 +201,10 @@ public class Desktop {
 				}
 			}
 			
-			//Util.log("Exec: " + exec + ", Icon: " + icon);
-			
-			if (! Gdx.files.absolute(icon).exists()) {
-				for (FileHandle l1 : Gdx.files.absolute("/usr/share/icons/gnome/").list()) {
-					if (! l1.isDirectory())
-						continue;
-					for (FileHandle l2 : Gdx.files.absolute("/usr/share/icons/gnome/" + l1.name()).list()) {
-						if (! l2.isDirectory())
-							continue;
-						for (FileHandle l3 : Gdx.files.absolute("/usr/share/icons/gnome/" + l1.name() + "/" + l2.name()).list()) {
-							//Util.log(l3.nameWithoutExtension());
-							if (l3.nameWithoutExtension().contentEquals(icon)) {
-								//Util.log(l3.path());
-								icon = l3.path();
-								break;
-							}
-						}
-					}
-				}
-			}
-			
-			if (Gdx.files.absolute(icon).extension().contentEquals("xpm")) {
-				icon = "/usr/share/icons/gnome/16x16/categories/applications-other.png";
-			}
-			
-			if (! Gdx.files.absolute(icon).exists()) {
-				icon = "/usr/share/icons/gnome/16x16/categories/applications-other.png";
-			}
-			
+			icon = Util.locateIcon(icon, "/usr/share/icons/gnome/16x16/categories/applications-other.png");
 			Util.log("Exec: " + exec + ", Icon: " + icon);
 			
-			//return;
-			Desktop.add(new Icon((float) Math.random()*10-5, (float) Math.random()*5+2, exec, icon));
-			
+			Desktop.add(new Icon((float) Math.random()*50-25, (float) Math.random()*10+2, exec, icon));
 		}
 		
         for (int i = -100; i<100;i++) {

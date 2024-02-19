@@ -4,8 +4,11 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.Json.Serializable;
+import com.badlogic.gdx.utils.JsonValue;
 
-public class GameObject extends DefaultInterface{
+public class GameObject extends DefaultInterface implements Serializable{
 	protected float x,y;
 	protected float w, h;
 	protected LayerName layer;
@@ -141,29 +144,49 @@ public class GameObject extends DefaultInterface{
 	LayerName getLayer () {return layer;}
 	
 	
+	/* Serializable Interface */
+	@Override
+	public void write(Json json) {
+		if (noSave) return;
+		
+		json.writeValue("x", x);
+		json.writeValue("y", y);
+		json.writeValue("w", w);
+		json.writeValue("h", h);
+		json.writeValue("angle", angle);
+		json.writeValue("layer", layer);
+		
+		json.writeValue("vx", vx);
+		json.writeValue("vy", vy);
+		json.writeValue("facing", facing);
+		json.writeValue("hidden", hidden);
+		
+		if (sprite != null)
+			json.writeValue("sprite", sprite);
+		
+	}
+
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		x = jsonData.getFloat("x");
+		y = jsonData.getFloat("y");
+		w = jsonData.getFloat("w");
+		h = jsonData.getFloat("h");
+		angle = jsonData.getFloat("angle");
+		//jsonData.("layer", layer);
+		
+		vx = jsonData.getFloat("vx", vx);
+		vy = jsonData.getFloat("vy", vy);
+		//jsonData.getFloat("facing", facing);
+		hidden = jsonData.getBoolean("hidden");
+		
+		setup();
+	}
+	
 }
 
 /*
 class GameObject extends Default_Interface {
-	GameObject(float _x, float _y, int _layer, Sprite _sprite) {//NORM
-	this();
-
-	x = _x;
-	y = _y;
-	layer = _layer;
-
-	sprite = _sprite;
-
-	if (_sprite != null && wb.addWithPhys) { // Problem Line
-	this.body = new Physics_Body(CT_STATIC, CS_AABB, _sprite.tw*_sprite.scale, _sprite.th*_sprite.scale);
-	this.body.setParent(this);
-
-	body.box.setPosition(_x+body.width/2, _y+body.height/2);
-	}
-
-	setup();
-
-	}
 	GameObject(float _x, float _y, int _layer, Sprite _sprite, Physics_Body _body) {
 	this();
 

@@ -41,6 +41,6 @@ public class Springform extends ApplicationAdapter {
     
 	@Override
 	public void dispose () {
-		
+		Util.log("All Done.  Cleaning up...");
 	}
 }

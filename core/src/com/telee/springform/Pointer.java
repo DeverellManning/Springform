@@ -25,7 +25,7 @@ public class Pointer extends GameObject {
 		
 		speed = 0.24f;
 		
-		Gdx.input.setCursorCatched(true);
+		//Gdx.input.setCursorCatched(true);
 		Gdx.input.setCursorPosition(Render.hvasX, Render.hvasY);
         
 		body.box.setGravityScale(0);
@@ -48,7 +48,7 @@ public class Pointer extends GameObject {
 				if (o != null && o.getClass() == Icon.class) {
 					((Icon) o).execute();
 				}
-				return true;
+				return false;
 			}
 		};
 		
@@ -82,7 +82,7 @@ public class Pointer extends GameObject {
 		
 		
 		
-		if (Gdx.input.isTouched()) {
+		if (Gdx.input.justTouched()) {
 			Desktop.pworld.QueryAABB(onclick, x, y, x, y);
 		}
 		

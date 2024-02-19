@@ -2,18 +2,32 @@ package com.telee.springform;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 
 class Sprite extends GameComponent {
 	Texture texture;
+	String texturePath;
+	
 	float scale;
 	float w, h;
 	int frameCount, cframe;
 	float tw;
 	float th;
 	
+	/** Zero parameter constructor for loading from json */
+	Sprite() {
+		super();
+		scale = 1;
+		tw = 0;
+		th = 0;
+		texture = null;
+	}
+	
 	Sprite(String _texture, float _scale) {
 		super("Sprite");
 		
+		texturePath = _texture;
 		if (Gdx.files.internal(_texture).exists())
 			this.texture = new Texture((Gdx.files.internal(_texture)));
 		
@@ -67,5 +81,19 @@ class Sprite extends GameComponent {
 			
 			
 		}
+	}
+	
+	@Override
+	public void write(Json json) {
+		json.writeValue("texturePath", texturePath);
+	}
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		texturePath = jsonData.getString("texturePath");
+		if (Gdx.files.internal(texturePath).exists())
+			this.texture = new Texture((Gdx.files.internal(texturePath)));
+		
+		if (Gdx.files.absolute(texturePath).exists())
+			this.texture = new Texture((Gdx.files.absolute(texturePath)));
 	}
 }
