@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.JsonValue;
 
 public class GameObject extends DefaultInterface implements Serializable{
 	protected float x,y;
-	protected float w, h;
+	protected float w, h; //Half Width and Half Height
 	protected LayerName layer;
 	protected float angle;
 	
@@ -18,9 +18,11 @@ public class GameObject extends DefaultInterface implements Serializable{
 	
 	T facing;
 	
-	/** Flags */
+	/** Remove Flag */
 	private boolean remove;
+	/** Do not save objects with this flag */
 	boolean noSave;
+	/** Object is invisible */
 	boolean hidden;
 	
 	//Components
@@ -94,14 +96,10 @@ public class GameObject extends DefaultInterface implements Serializable{
 	//Draw Method
 	void draw() {
 		Matrix4 transform = new Matrix4();
-		
 		transform.translate(x, y, 0);
 		transform.rotate(new Quaternion().set(new Vector3(0, 0, 1), angle));
-		
-		
 		Render.sprite.setTransformMatrix(transform);
 		
-
 		if (sprite != null) {sprite.draw();}
 		//if (aura != null) {aura.draw();}
 		if(Key.Down(Keys.SHIFT_LEFT) && Key.Down(Keys.NUM_1)) {
@@ -109,14 +107,12 @@ public class GameObject extends DefaultInterface implements Serializable{
 		}
 	}
 
-
+	public boolean doRemove() {return remove;}
 	void remove() {
 		if (body != null) body.remove();
 		remove = true;
 	}
 	
-	public boolean doRemove() {return remove;}
-
 	float getX () {return x;}
 	float getY () {return y;}
 	float getRotation () {return angle;}
@@ -140,6 +136,12 @@ public class GameObject extends DefaultInterface implements Serializable{
 	
 	float getWidth () {return w;}
 	float getHeight () {return h;}
+	
+	void scaledSpriteRatio (float scale) {
+		w = (sprite.tw/sprite.th)*scale;
+		h = 1*scale;
+		
+	}
 	
 	LayerName getLayer () {return layer;}
 	

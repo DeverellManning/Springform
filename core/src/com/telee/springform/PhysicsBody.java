@@ -54,6 +54,8 @@ public class PhysicsBody extends GameComponent{
 	
 	//Setup - After setParent()
 	void setup() {
+		if (box != null)
+			Desktop.pworld.destroyBody(box);
 		BodyDef def = new BodyDef();
 		Shape shape;
 		
@@ -83,6 +85,7 @@ public class PhysicsBody extends GameComponent{
 			tmp.setAsBox(width, height);
 			shape = tmp;
 		}
+		
 		
 		
 		box = Desktop.pworld.createBody(def);

@@ -12,14 +12,16 @@ public class Pointer extends GameObject {
 	QueryCallback onclick;
 	
 	Pointer() {
-		super(0, 15, new Sprite("textures/arrow.png", 1),
+		super(0, 15, new Sprite("./assets/textures/arrow.png", 1),
 				new PhysicsBody(T.CT_DYNAMIC, T.CS_AABB));
 		
 		this.facing = T.D_RIGHT;
 		this.layer = LayerName.pointer;
 		
-		w = sprite.tw/64;
-		h = sprite.th/64;
+		//w = sprite.tw/64;
+		//h = sprite.th/64;
+		
+		scaledSpriteRatio(0.5f);
 		
 		setup();
 		

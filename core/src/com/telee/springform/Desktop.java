@@ -218,11 +218,14 @@ public class Desktop {
         	}
         }
         
+        for(FileHandle i : Gdx.files.internal("./").list()) {
+        	Util.log(i.path());
+        }
+        
         Desktop.pointer = new Pointer();
         Desktop.add(Desktop.pointer);
 		
 		pworld.setGravity(new Vector2(0, gravity));
-		
 	}
 		
 	static void clear() {
