@@ -1,6 +1,7 @@
 package com.telee.springform;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector3;
 
 public class Layer extends DefaultInterface{
 	
@@ -28,16 +29,18 @@ public class Layer extends DefaultInterface{
 			Render.sprite.draw(background, -1, -1, 2, 2);
 		}
 		
-		Desktop.cam.transform();
+		Render.transform();
 		
 		for (int i = objs.size()-1; i >= 0; i--) {
 			GameObject c = objs.get(i);
-			//if ((c.x - camX)*zoom > Render.vasX+64 || (c.x - camX)*zoom < -64) {continue;}
-			//if ((c.y - camY)*zoom > Render.vasY+64 || (c.y - camY)*zoom < -64) {continue;}
+			Vector3 screenPos = Desktop.cam.cam.project(new Vector3(c.x, c.y, 0f));
+			if (screenPos.x > Render.vasX+64 || screenPos.x < -64) {continue;}
+			if (screenPos.y > Render.vasY+64 || screenPos.y < -64) {continue;}
 			if (c.hidden) {continue;}
 			
 			c.draw();
 		}
+		
 		Render.sprite.flush();
 	}
 	

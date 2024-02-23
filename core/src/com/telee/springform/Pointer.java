@@ -13,7 +13,7 @@ public class Pointer extends GameObject {
 	
 	Pointer() {
 		super(0, 15, new Sprite("textures/arrow.png", 1),
-				new PhysicsBody(T.CT_DYNAMIC, T.CS_AABB, 40, 40));
+				new PhysicsBody(T.CT_DYNAMIC, T.CS_AABB));
 		
 		this.facing = T.D_RIGHT;
 		this.layer = LayerName.pointer;
@@ -25,7 +25,7 @@ public class Pointer extends GameObject {
 		
 		speed = 0.24f;
 		
-		//Gdx.input.setCursorCatched(true);
+		Gdx.input.setCursorCatched(true);
 		Gdx.input.setCursorPosition(Render.hvasX, Render.hvasY);
         
 		body.box.setGravityScale(0);

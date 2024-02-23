@@ -15,6 +15,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class Springform extends ApplicationAdapter {
 	@Override
     public void create () {
+		Config.load("./");
+		
 		Render.init();
         Gdx.graphics.setWindowedMode(Render.vasX, Render.vasY);
         Gdx.input.setCursorPosition(Render.hvasX, Render.hvasY);
@@ -42,5 +44,6 @@ public class Springform extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		Util.log("All Done.  Cleaning up...");
+		Render.dispose();
 	}
 }

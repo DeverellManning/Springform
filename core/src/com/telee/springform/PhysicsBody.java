@@ -13,6 +13,7 @@ public class PhysicsBody extends GameComponent{
 	float width, height;
 	Boolean support, touching;
 	float friction, restitution;
+	boolean allLayers;
 	
 	Body box;
 	
@@ -20,6 +21,7 @@ public class PhysicsBody extends GameComponent{
 		this.clss = "Physics_Body";
 		friction = 0.4f;
 		restitution = 0.2f;
+		allLayers = false;
 	}
 	
 	PhysicsBody(T _type, T _shape, float _width, float _height) {
@@ -43,6 +45,11 @@ public class PhysicsBody extends GameComponent{
 		this.type = _type;
 		width = 1;
 		height = 1;
+	}
+	
+	PhysicsBody(T _type, T _shape, boolean _allLayers) {
+		this(_type, _shape);
+		allLayers = _allLayers;
 	}
 	
 	//Setup - After setParent()
@@ -87,11 +94,19 @@ public class PhysicsBody extends GameComponent{
 		
 		Filter filter = new Filter();
 		filter.groupIndex = Desktop.layers.get(parent.layer).collisionGroup;
-		filter.maskBits = 0x0000;
+		filter.maskBits = 0x1000;
+		filter.categoryBits = 0x0001;
+		if (allLayers) {
+			filter.maskBits = 0x1111;
+			filter.categoryBits = 0x1001;
+		}
+
 		f.setFilterData(filter);
 		box.setUserData(this);
 
 		shape.dispose();
+		
+		
 		
 	}
 	

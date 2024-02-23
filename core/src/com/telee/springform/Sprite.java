@@ -66,14 +66,14 @@ class Sprite extends GameComponent {
 			//pop();
 		} else {
 			if(parent.facing == T.D_LEFT) {
-				Render.sprite.draw(texture, w*-1f, h*-1f, w*2f, h*2f,
+				Render.sprite.draw(texture, -w, -h, w*2f, h*2f,
 						0, 0, (int) tw, (int) th, false, false);
 				/*Render.sprite.draw(texture, w*scale*-0.5f, h*scale*-0.5f, w*scale, h*this.scale,
 						0, 0, (int) w, (int) h, false, false);*/
 				/*image(texlib.get(texture), this.w*this.scale*-0.5, this.h*this.scale*-0.5, this.w*this.scale, this.h*this.scale,
 				Math.floor(this.w), 0, 0, Math.floor(this.h));*/
 			} else {
-				Render.sprite.draw(texture, w*-1f, h*-1f, w*2f, h*2f,
+				Render.sprite.draw(texture, -w, -h, w*2f, h*2f,
 						0, 0, (int) tw, (int) th, true, false);
 				/*image(texlib.get(texture), this.w*this.scale*-0.5, this.h*this.scale*-0.5, this.w*this.scale, this.h*this.scale,
 				0, 0, floor(this.w), floor(this.h));*/

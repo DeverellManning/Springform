@@ -17,11 +17,11 @@ public class Icon extends GameObject {
 	}
 	
 	public void execute() {
-		if (exec.isEmpty())
+		if (exec == null || exec.isEmpty())
 			return;
 		
         try {
-			Runtime.getRuntime().exec(exec).;
+			Runtime.getRuntime().exec(exec);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

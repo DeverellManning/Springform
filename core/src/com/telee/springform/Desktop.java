@@ -25,9 +25,14 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 
 public class Desktop {
+	//Main Object List
 	private static ObjectList objs;
-	static ArrayList<Camera> cams;
 	static TreeMap<LayerName,Layer> layers;
+	static ArrayList<Camera> cams;
+	
+	//Tools for vista interaction
+	static VistaSaver vistaSaver;
+	
 	
 	//Object References
 	static Pointer pointer;
@@ -49,21 +54,26 @@ public class Desktop {
 	
 	static void init() {
 		Box2D.init();
+		
+		//Set up physics world
 		pworld = new World(new Vector2(0,-100), true);
 		drawpworld = new Box2DDebugRenderer();
 		
-		
+		//Initialize object lists
 		objs = new ObjectList();
 		cams = new ArrayList<Camera>();
-		
 		layers = new TreeMap<LayerName, Layer>();
 		
+		vistaSaver = new VistaSaver();
+		
+		//Add all layers. (This should go somewhere else)
 		layers.put(LayerName.backdrop, new Layer(LayerName.backdrop));
 		layers.put(LayerName.back, new Layer(LayerName.back));
 		layers.put(LayerName.main, new Layer(LayerName.main));
 		layers.put(LayerName.pointer, new Layer(LayerName.pointer));
 		layers.put(LayerName.front, new Layer(LayerName.front));
 		
+		//Unimportant
 		skyColor = Color.SKY;
 		gravity = -850;
 		paused = false;
@@ -119,10 +129,6 @@ public class Desktop {
 	@SuppressWarnings("unused")
 	static void draw() {
 		ScreenUtils.clear(skyColor);
-	
-		float zoom = cam.zoom;
-		float camX = cam.x;
-		float camY = cam.y;
 		
 		//stroke(C_RED);
 		//Render.shape.line(0, 0, 100, 0);
@@ -149,15 +155,8 @@ public class Desktop {
 	}
 	
 	static void save() {
-		Json json = new Json();
-		String jobjs = json.toJson(objs);
-		
-		Util.log(json.prettyPrint(jobjs));
-		
-		FileHandle dataDir = Gdx.files.external("./.local/share/springform");
-		
-		dataDir.child("save.json").writeString(jobjs, false);
-		
+		vistaSaver.writeVistaData(path);
+		vistaSaver.writeObjectList(objs, path);
 	}
 	
 	static void load(String _path) {
@@ -206,6 +205,8 @@ public class Desktop {
 			
 			Desktop.add(new Icon((float) Math.random()*50-25, (float) Math.random()*10+2, exec, icon));
 		}
+		
+		Desktop.add(new GameObject(-10, 20, LayerName.front, new Sprite("textures/Enemy.png", 0.9f), new PhysicsBody(T.CT_DYNAMIC, T.CS_AABB)));
 		
         for (int i = -100; i<100;i++) {
         	for (int d = -2; d>-13; d=d-2) {
