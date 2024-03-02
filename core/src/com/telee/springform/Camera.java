@@ -24,7 +24,7 @@ public class Camera extends GameObject {
 		Render.sprite.setProjectionMatrix(cam.combined);
 		Render.shape.setProjectionMatrix(cam.combined);
 	}
-	void update() {
+	public void update() {
 		cam.translate(-cam.position.x, -cam.position.y);
 		cam.translate(this.x, -this.y);
 		cam.zoom = zoom;

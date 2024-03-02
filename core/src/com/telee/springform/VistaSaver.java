@@ -16,7 +16,15 @@ public class VistaSaver {
 		Json json = new Json();
 		String jobjs = json.toJson(objs);
 		Util.log(json.prettyPrint(jobjs));
-		dataDir.child("meta-fs" + path + "objects.json").writeString(jobjs, false);
+		
+		//Check path
+		if (! Gdx.files.absolute(path).isDirectory()) {
+			Util.log("Loaded Directory does not exist or is not a directory: " + path);
+			return;
+		}
+		
+		//Write File
+		dataDir.child("meta-fs/" + path + "/objects.json").writeString(jobjs, false);
 	}
 	
 	public void writeVistaData(String Path) {

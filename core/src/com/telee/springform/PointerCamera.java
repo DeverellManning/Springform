@@ -18,7 +18,7 @@ public class PointerCamera extends Camera {
 		y = -target.y;
 	}
 	
-	void update() {
+	public void update() {
 		super.update();
 		float tx = target.x;
 		float ty = -target.y;

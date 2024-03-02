@@ -3,18 +3,24 @@ package com.telee.springform;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.JsonValue;
 
 public class GameObject extends DefaultInterface implements Serializable{
+	//Geometry
 	protected float x,y;
 	protected float w, h; //Half Width and Half Height
 	protected LayerName layer;
 	protected float angle;
 	
-	float vx, vy;
+	//Data
+	String name;
+	
+	public float vx;
+	public float vy;
 	
 	T facing;
 	
@@ -27,7 +33,7 @@ public class GameObject extends DefaultInterface implements Serializable{
 	
 	//Components
 	Sprite sprite;
-	PhysicsBody body;
+	public PhysicsBody body;
 	/*Particle_Emitter aura;
 	Eblock_Controller guide;*/
 	
@@ -49,7 +55,21 @@ public class GameObject extends DefaultInterface implements Serializable{
 		setup();
 	}
 
-	GameObject(float _x, float _y, LayerName _l, Sprite _s, PhysicsBody _b) {
+	public GameObject(Vector2 pos, Vector2 size, LayerName _l, String texture) {
+		this();
+		sprite = new Sprite(texture, 1);
+		body = new PhysicsBody(T.CS_AABB, T.CT_DYNAMIC);
+		
+		x=pos.x;
+		y=pos.y;
+		w=size.x;
+		h=size.y;
+		layer = _l;
+		
+		setup();
+	}
+	
+	public GameObject(float _x, float _y, LayerName _l, Sprite _s, PhysicsBody _b) {
 		this();
 		sprite = _s;
 		body = _b;
@@ -58,16 +78,16 @@ public class GameObject extends DefaultInterface implements Serializable{
 		y=_y;
 		layer = _l;
 		
-		
 		setup();
 	}
 	
-	GameObject(float _x, float _y, Sprite _s, PhysicsBody _b) {
+	public GameObject(float _x, float _y, Sprite _s, PhysicsBody _b) {
 		this(_x, _y, LayerName.main, _s, _b);
 	}
 	
 	//After Constructor setup
-	void setup() {
+	public void setup() {
+		Util.log("w: " + w + "h: " + h);
 		if (sprite != null) {
 			sprite.setParent(this);
 			sprite.setup();
@@ -85,7 +105,7 @@ public class GameObject extends DefaultInterface implements Serializable{
 	}
 	
 	//Update method
-	void update() {
+	public void update() {
 		if (body != null) {body.update();}
 		if (sprite != null) {sprite.update();}
 		/* if (aura != null) {aura.update();}
@@ -94,7 +114,7 @@ public class GameObject extends DefaultInterface implements Serializable{
 	}
 	
 	//Draw Method
-	void draw() {
+	public void draw() {
 		Matrix4 transform = new Matrix4();
 		transform.translate(x, y, 0);
 		transform.rotate(new Quaternion().set(new Vector3(0, 0, 1), angle));
@@ -113,9 +133,9 @@ public class GameObject extends DefaultInterface implements Serializable{
 		remove = true;
 	}
 	
-	float getX () {return x;}
-	float getY () {return y;}
-	float getRotation () {return angle;}
+	public float getX () {return x;}
+	public float getY () {return y;}
+	public float getRotation () {return angle;}
 
 	void setPosition(float x, float y) {
 		if (body != null) {
@@ -134,8 +154,8 @@ public class GameObject extends DefaultInterface implements Serializable{
 		this.angle = a;
 	}
 	
-	float getWidth () {return w;}
-	float getHeight () {return h;}
+	public float getWidth () {return w;}
+	public float getHeight () {return h;}
 	
 	void scaledSpriteRatio (float scale) {
 		w = (sprite.tw/sprite.th)*scale;
@@ -143,14 +163,18 @@ public class GameObject extends DefaultInterface implements Serializable{
 		
 	}
 	
-	LayerName getLayer () {return layer;}
+	public void snap() {
+		Util.log("x: " + x + "Snapped: " + Util.toGrid(x));
+		x = Util.toGrid(x);
+		y = Util.toGrid(y);
+	}
+	
+	public LayerName getLayer () {return layer;}
 	
 	
 	/* Serializable Interface */
 	@Override
 	public void write(Json json) {
-		if (noSave) return;
-		
 		json.writeValue("x", x);
 		json.writeValue("y", y);
 		json.writeValue("w", w);
@@ -162,9 +186,12 @@ public class GameObject extends DefaultInterface implements Serializable{
 		json.writeValue("vy", vy);
 		json.writeValue("facing", facing);
 		json.writeValue("hidden", hidden);
+		json.writeValue("noSave", noSave);
 		
 		if (sprite != null)
 			json.writeValue("sprite", sprite);
+		if (body != null)
+			json.writeValue("body", body);
 		
 	}
 
@@ -175,12 +202,16 @@ public class GameObject extends DefaultInterface implements Serializable{
 		w = jsonData.getFloat("w");
 		h = jsonData.getFloat("h");
 		angle = jsonData.getFloat("angle");
-		//jsonData.("layer", layer);
+		layer = json.readValue(LayerName.class, jsonData.get("layer"));
 		
-		vx = jsonData.getFloat("vx", vx);
-		vy = jsonData.getFloat("vy", vy);
+		vx = jsonData.getFloat("vx");
+		vy = jsonData.getFloat("vy");
 		//jsonData.getFloat("facing", facing);
 		hidden = jsonData.getBoolean("hidden");
+		noSave = jsonData.getBoolean("noSave", false);
+		
+		sprite = json.readValue(Sprite.class, jsonData.get("sprite"));
+		body = json.readValue(PhysicsBody.class, jsonData.get("body"));
 		
 		setup();
 	}
@@ -189,42 +220,10 @@ public class GameObject extends DefaultInterface implements Serializable{
 
 /*
 class GameObject extends Default_Interface {
-	GameObject(float _x, float _y, int _layer, Sprite _sprite, Physics_Body _body) {
-	this();
-
-	this.x = _x;
-	this.y = _y;
-	this.layer = _layer;
-
-	this.body = _body;
-	this.aura = null;
-	this.sprite = _sprite;
-	this.guide = null;
-
-
-	setup();
-
-	}
 	GameObject(JSONObject jc) {
-	  this();
-
-	  x = jc.getFloat("x");
-	  y = jc.getFloat("y");
-	  vx = jc.getFloat("vx");
-	  vy = jc.getFloat("vy");
 	  //this.mass = jc.getFloat("mass");
 	  layer = jc.getInt("layer");
 	  facing = jc.getInt("facing");
-
-
-	  //Retreive, Create Sprite
-	  JSONObject jSprite = jc.getJSONObject("sprite");
-	  if (jSprite != null) {
-	switch(jSprite.getString("class")) {
-	case "Animated_Sprite": sprite = new Animated_Sprite(jSprite);break;
-	case "Sprite": 									sprite = new Sprite(jSprite); break;
-	}
-	  }
 
 	  //Load Body
 	  JSONObject jBody = jc.getJSONObject("body");
@@ -247,52 +246,5 @@ class GameObject extends Default_Interface {
 	  }
 	  }
 
-
-
-	  //load Aura
-	  JSONObject jAura = jc.getJSONObject("aura");
-	  if (jAura != null) {
-	  //aura = new Particle_Emitter(jAura);
-	  }
-
-
-	  setup();
-
-	  }
-
-
-
-
-
-	  JSONObject saveJSON() {
-	JSONObject j = super.saveJSON();
-	j.setString("class", "Game_Object");
-
-	j.setFloat("x", x);
-	j.setFloat("y", y);
-	j.setFloat("vx", vx);
-	j.setFloat("vy", vy);
-	j.setFloat("w", x);
-	j.setFloat("h", y);
-	j.setFloat("mass", mass);
-	j.setFloat("rotation", mass);
-	j.setInt("layer", layer);
-	j.setInt("facing", facing);
-	j.setBoolean("hidden", hidden);
-
-	if (sprite != null)
-	j.setJSONObject("sprite", sprite.saveJSON());
-
-	if (aura != null)
-	j.setJSONObject("aura", aura.saveJSON());
-
-	if (guide != null)
-	j.setJSONObject("guide", guide.saveJSON());
-
-	if (body != null)
-	j.setJSONObject("body", body.saveJSON());
-
-	return j;
-	  }
 	}
 */

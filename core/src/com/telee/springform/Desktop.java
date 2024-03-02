@@ -1,15 +1,11 @@
 package com.telee.springform;
 
-import java.io.IOException;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -18,9 +14,6 @@ import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.JsonWriter.OutputType;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 
@@ -32,14 +25,16 @@ public class Desktop {
 	
 	//Tools for vista interaction
 	static VistaSaver vistaSaver;
+	static VistaLoader vistaLoader;
+	static VistaGenerator vistaGen;
 	
 	
 	//Object References
-	static Pointer pointer;
+	public static Pointer pointer;
 	static Camera cam;
 	
 	//Physics
-	static World pworld;
+	public static World pworld;
 	static Box2DDebugRenderer drawpworld;
 	
 	//
@@ -65,6 +60,8 @@ public class Desktop {
 		layers = new TreeMap<LayerName, Layer>();
 		
 		vistaSaver = new VistaSaver();
+		vistaLoader = new VistaLoader();
+		vistaGen = new VistaGenerator();
 		
 		//Add all layers. (This should go somewhere else)
 		layers.put(LayerName.backdrop, new Layer(LayerName.backdrop));
@@ -75,7 +72,7 @@ public class Desktop {
 		
 		//Unimportant
 		skyColor = Color.SKY;
-		gravity = -850;
+		gravity = -40;
 		paused = false;
 		
 		breakLoop = false;
@@ -90,6 +87,11 @@ public class Desktop {
 		float x = Gdx.input.getX() - Gdx.graphics.getWidth()/2;
 		float y = Gdx.input.getY() - Gdx.graphics.getHeight()/2;;
 		angle = (float) Math.atan2(y, x);
+		
+		if (! paused) {
+			//pworld.step(Gdx.graphics.getDeltaTime(), 5, 5);
+			pworld.step(1/60f, 4, 2);
+		}
 		
 		if (! paused) {
 			for (int i = objs.size()-1; i >= 0; i--) {
@@ -119,11 +121,17 @@ public class Desktop {
 			//game.delta = 1;
 		}
 		
-		if (! paused) {
-			//pworld.step(Gdx.graphics.getDeltaTime(), 5, 5);
-			pworld.step(1/60f, 4, 2);
-		}
+		if (Gdx.input.isKeyJustPressed(Keys.S))
+			save();
 		
+		if (Gdx.input.isKeyJustPressed(Keys.G))
+			vistaGen.baseGen(path);
+		
+		if (Gdx.input.isKeyJustPressed(Keys.C))
+			clear();
+		
+		if (Gdx.input.isKeyJustPressed(Keys.L))
+			load(path);
 	}
 	
 	@SuppressWarnings("unused")
@@ -131,9 +139,9 @@ public class Desktop {
 		ScreenUtils.clear(skyColor);
 		
 		//stroke(C_RED);
-		//Render.shape.line(0, 0, 100, 0);
+		Render.shape.line(0, 0, 7, 0);
 		//stroke(C_BLUE);
-		//Render.shape.line(0, 0, 0, 100);
+		Render.shape.line(0, 0, 0, 7);
 		
 		for (Layer l : layers.values()) {
 			l.draw();
@@ -146,12 +154,6 @@ public class Desktop {
 			Render.shape.setColor(Color.FIREBRICK.r, Color.FIREBRICK.g, Color.FIREBRICK.b, 0.5f);
 			Render.shape.rect(mx-32,my-32, 64, 64);
 		}
-		
-		if (Key.Down(Keys.S)) {
-			save();
-		}
-
-		
 	}
 	
 	static void save() {
@@ -160,68 +162,24 @@ public class Desktop {
 	}
 	
 	static void load(String _path) {
+		//Check path
+		if (! Gdx.files.absolute(_path).isDirectory()) {
+			Util.log("Loaded Directory does not exist or is not a directory: " + path);
+			return;
+		}
+		
+		Util.log("Loading into directory: " + _path);
 		path = _path;
 		
 		clear();
 		
-		FileHandle dir = Gdx.files.external(path);
+		vistaLoader.readObjectList(path);
 		
-		for (FileHandle f : dir.list()) {
-			if (f.isDirectory())
-				continue;
-			
-			String ext = f.extension();
-			if (! ext.contentEquals("desktop"))
-				continue;
-			
-			CharBuffer content = CharBuffer.allocate(1000);
-			try {
-				f.reader(Charset.defaultCharset().name()).read(content);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			Util.log(f.name());
-			//Util.log(content.toString());
-			
-			String icon = "system-run";
-			String exec = "";
-			
-			String cont = String.valueOf(content.array());
-			
-			for (String l : cont.split("\n")) {
-				if (l.startsWith("Exec=")) {
-					exec=l.replace("Exec=", "");
-					continue;
-				}
-				if (l.startsWith("Icon=")) {
-					icon=l.replace("Icon=", "");
-					continue;
-				}
-			}
-			
-			icon = Util.locateIcon(icon, "/usr/share/icons/gnome/16x16/categories/applications-other.png");
-			Util.log("Exec: " + exec + ", Icon: " + icon);
-			
-			Desktop.add(new Icon((float) Math.random()*50-25, (float) Math.random()*10+2, exec, icon));
+		for (GameObject o : vistaLoader.objs) {
+			if (o.noSave) continue;
+			add(o);
 		}
 		
-		Desktop.add(new GameObject(-10, 20, LayerName.front, new Sprite("textures/Enemy.png", 0.9f), new PhysicsBody(T.CT_DYNAMIC, T.CS_AABB)));
-		
-        for (int i = -100; i<100;i++) {
-        	for (int d = -2; d>-13; d=d-2) {
-        		Desktop.add(new Block(i*2, d));
-        	}
-        	
-        	if (Math.random() > 0.8) {
-        		Desktop.add(new GameObject(i*2, 0, new Sprite("textures/bush.png", 0.9f), new PhysicsBody(T.CT_STATIC, T.CS_AABB)));
-        	}
-        }
-        
-        for(FileHandle i : Gdx.files.internal("./").list()) {
-        	Util.log(i.path());
-        }
-        
         Desktop.pointer = new Pointer();
         Desktop.add(Desktop.pointer);
 		
@@ -231,6 +189,10 @@ public class Desktop {
 	static void clear() {
 		objs.clear();
 		cams.clear();
+		
+		for (Layer l : layers.values()) {
+			l.clear();
+		}
 		
 		//Ensure a drone camera
 		cams.add(new DroneCamera(0f,0f));
@@ -246,7 +208,7 @@ public class Desktop {
 	
 	
 	
-	static void add(GameObject o) {
+	public static void add(GameObject o) {
 		if (! objs.contains(o)) {
 			objs.add(o);
 			

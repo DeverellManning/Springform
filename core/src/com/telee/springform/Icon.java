@@ -5,6 +5,10 @@ import java.io.IOException;
 public class Icon extends GameObject {
 	String exec;
 	
+	public Icon() {
+		
+	}
+	
 	public Icon(float _x, float _y, String command, String icon) {
 		super(_x, _y, LayerName.main, new Sprite(icon, 1), new PhysicsBody(T.CT_DYNAMIC, T.CS_AABB));
 		

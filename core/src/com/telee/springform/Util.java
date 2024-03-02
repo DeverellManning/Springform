@@ -16,14 +16,15 @@ public final class Util {
 	static void log(String message, Priority priority) {
 		System.out.println(message);
 	}
-	static void log(String message) {
+	public static void log(String message) {
 		log(message, Priority.debug);
 	}
 	
 	
-	int toGrid(float x) {
+	public static int toGrid(float x) {
 		return (int) Math.floor(x);
 	}
+	
 	float toWorld(int x) {
 		return x;
 	}

@@ -3,29 +3,24 @@ package com.telee.springform;
 abstract class DefaultInterface {
 	String clss;
 	
-	DefaultInterface() {
+	public DefaultInterface() {
 		clss = "DefaultInterface";
 	
 	}
-	void init() {
+	public void init() {
 	
 	}
-	void setup() {
+	public void setup() {
 	
 	}
-	void draw() {
+	public void draw() {
 	
 	}
-	void update() {
+	public void update() {
 	
 	}
-	void input() {
+	public void input() {
 	
 	}
-	/*JSONObject saveJSON() {
-		JSONObject j = new JSONObject();
-		j.setString("class", clss);
-		return j;
-	}*/
 }
 

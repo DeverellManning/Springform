@@ -7,18 +7,20 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 
 public class PhysicsBody extends GameComponent{
-	T shape, type;
+	T shape;
+	public T type;
 	float width, height;
 	Boolean support, touching;
 	float friction, restitution;
 	boolean allLayers;
 	
-	Body box;
+	public Body box;
 	
 	PhysicsBody() {
-		this.clss = "Physics_Body";
 		friction = 0.4f;
 		restitution = 0.2f;
 		allLayers = false;
@@ -53,9 +55,10 @@ public class PhysicsBody extends GameComponent{
 	}
 	
 	//Setup - After setParent()
-	void setup() {
+	public void setup() {
 		if (box != null)
 			Desktop.pworld.destroyBody(box);
+		
 		BodyDef def = new BodyDef();
 		Shape shape;
 		
@@ -115,7 +118,7 @@ public class PhysicsBody extends GameComponent{
 	
 
 	
-	void update() {
+	public void update() {
 		support = false;
 		touching = false;
 		
@@ -138,6 +141,18 @@ public class PhysicsBody extends GameComponent{
 	public void setAngle(float a) {
 		box.setTransform(box.getPosition(), a);
 		
+	}
+	
+	@Override
+	public void write(Json json) {
+		json.writeValue("shape", shape);
+		json.writeValue("type", type);
+		
+	}
+	@Override
+	public void read(Json json, JsonValue jsonData) {
+		shape = json.readValue(T.class, jsonData.get("shape"));
+		type = json.readValue(T.class, jsonData.get("type"));
 	}
 	
 }

@@ -8,7 +8,7 @@ public class DroneCamera extends Camera {
 		this.speed = 6f;
 	}
 	
-	void update() {
+	public void update() {
 		float spd = this.speed * this.zoom;
 		
 		if (Key.Down(Input.Keys.SHIFT_LEFT)) {

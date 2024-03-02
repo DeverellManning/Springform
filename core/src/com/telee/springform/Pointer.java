@@ -1,9 +1,15 @@
 package com.telee.springform;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.MassData;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
+import com.telee.springform.tools.*;
 
 public class Pointer extends GameObject {
 	PointerCamera selfie;
@@ -11,9 +17,11 @@ public class Pointer extends GameObject {
 	
 	QueryCallback onclick;
 	
+	Tool tool;
+	
 	Pointer() {
-		super(0, 15, new Sprite("./assets/textures/arrow.png", 1),
-				new PhysicsBody(T.CT_DYNAMIC, T.CS_AABB));
+		super(0, 15, new Sprite("./assets/textures/pointers/arrow.png", 1),
+				new PhysicsBody(T.CT_STATIC, T.CS_AABB));
 		
 		this.facing = T.D_RIGHT;
 		this.layer = LayerName.pointer;
@@ -23,6 +31,8 @@ public class Pointer extends GameObject {
 		
 		scaledSpriteRatio(0.5f);
 		
+		tool = new CreateTool();
+
 		setup();
 		
 		speed = 0.24f;
@@ -57,6 +67,16 @@ public class Pointer extends GameObject {
 
 	}
 	
+	public void setup() {
+		super.setup();
+		
+		if (tool != null) {
+			tool.setParent(this);
+			tool.setup();
+		}
+
+	}
+	
 	public void update() {
 		vx += Gdx.input.getDeltaX()*speed;
 		vy += -Gdx.input.getDeltaY()*speed;
@@ -85,23 +105,53 @@ public class Pointer extends GameObject {
 		
 		
 		if (Gdx.input.justTouched()) {
-			Desktop.pworld.QueryAABB(onclick, x, y, x, y);
+			//Desktop.pworld.QueryAABB(onclick, x, y, x, y);
+			//Desktop.add(new Block(x, y));
 		}
+		
+		tool.update();
 		
 		
 	}
 	
+	void mouseScrolled(float amt) {
+		Util.log("Scrolled: " + amt);
+		if (amt > 0) {tool = new GrabTool(""); setup();};
+		if (amt < 0) {tool = new CreateTool(); setup();};
+	}
 	
-	void draw() {
-		super.draw();
+	void mouseDown(int button) {
+		if (button == Buttons.LEFT) {
+			tool.press();
+		}
+	}
+	
+	void mouseUp(int button) {
+		if (button == Buttons.LEFT) {
+			tool.release();
+		}
+	}
+	
+	public void draw() {
+		Matrix4 transform = new Matrix4();
+		transform.translate(x, y, 0);
+		transform.rotate(new Quaternion().set(new Vector3(0, 0, 1), angle));
+		Render.sprite.setTransformMatrix(transform);
+		
+		if (tool != null) {
+			tool.draw();
+		} else {
+			
+		}
+		if (sprite != null) {sprite.draw();}
+		if(Key.Down(Keys.SHIFT_LEFT) && Key.Down(Keys.NUM_1)) {
+			Render.shape.circle(0, 0, 4);
+		}
+
 	}
 	
 	void remove() {
 		
 	}
 	
-	void loadJSON() {
-		Gdx.files.external("textures");
-		
-	}
 }

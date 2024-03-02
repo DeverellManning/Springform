@@ -21,13 +21,17 @@ public class Springform extends ApplicationAdapter {
         Gdx.graphics.setWindowedMode(Render.vasX, Render.vasY);
         Gdx.input.setCursorPosition(Render.hvasX, Render.hvasY);
         
+        Gdx.input.setInputProcessor(new SpringformInputProccesor());
+        
         Desktop.init();
         
-        Desktop.load("./Desktop");
+        Desktop.load("/home/deverell-manning/Desktop");
     }
 
     @Override
     public void render () {
+    	Render.assets.update(17);
+    	
     	Desktop.update();
 
     	Render.begin();

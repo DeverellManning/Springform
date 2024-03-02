@@ -4,11 +4,11 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.JsonValue;
 
-class GameComponent extends DefaultInterface implements Serializable{
-	protected GameObject parent;
+public class GameComponent extends DefaultInterface implements Serializable{
+	public GameObject parent;
 	float ox, oy;
 	
-	GameComponent() {
+	protected GameComponent() {
 		super();
 		clss = this.getClass().toString();
 		ox = 0;
@@ -18,7 +18,7 @@ class GameComponent extends DefaultInterface implements Serializable{
 		this();
 		clss = _clss;
 	}
-	void setParent(GameObject _parent) {
+	public void setParent(GameObject _parent) {
 		this.parent = _parent;
 	}
 	

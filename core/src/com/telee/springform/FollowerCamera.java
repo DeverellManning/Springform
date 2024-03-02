@@ -9,7 +9,7 @@ public class FollowerCamera extends Camera {
 			super(0, 0);
 			target = _target;
 		}
-		void update() {
+		public void update() {
 			super.update();
 			//x = Math.round(target.x - Render.hvasX);
 			//y = Math.round(-target.y - Render.hvasY);
