@@ -1,27 +1,26 @@
 package com.telee.springform;
 
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 public class Render {
 	public static ShapeRenderer shape;
 	public static SpriteBatch sprite;
 	
-	static AssetManager assets;
+	public static AssetManager assets;
 	
 	static Label l;
 	static Label.LabelStyle lstyle;
 	static BitmapFont bfont;
 	
-	static int vasX, vasY, hvasX, hvasY;
+	public static int vasX, vasY;
+	public static int hvasX, hvasY;
 	
 	static Matrix4 identity = new Matrix4();
 	
@@ -30,6 +29,8 @@ public class Render {
 		sprite = new SpriteBatch();
 		
 		assets = new AssetManager();
+		
+		
 		
 		bfont = new BitmapFont();
 		

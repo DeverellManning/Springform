@@ -1,37 +1,40 @@
-package com.telee.springform;
+package com.telee.springform.components;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
+import com.telee.springform.DefaultInterface;
+import com.telee.springform.GameObject;
 import com.badlogic.gdx.utils.JsonValue;
 
 public class GameComponent extends DefaultInterface implements Serializable{
+	/** The GameObject that owns this component*/
 	public GameObject parent;
+	/** Offset position */
 	float ox, oy;
 	
 	protected GameComponent() {
 		super();
-		clss = this.getClass().toString();
 		ox = 0;
 		oy = 0;
 	}
-	GameComponent(String _clss) {
+	
+	protected GameComponent(String _clss) {
 		this();
-		clss = _clss;
 	}
+	
 	public void setParent(GameObject _parent) {
-		this.parent = _parent;
+		parent = _parent;
 	}
 	
 	@Override
 	public void write(Json json) {
 		json.writeValue(ox);
 		json.writeValue(oy);
-		
 	}
+	
 	@Override
 	public void read(Json json, JsonValue jsonData) {
 		ox = jsonData.getFloat("ox");
 		oy = jsonData.getFloat("oy");
-		
 	}
 }

@@ -2,7 +2,7 @@ package com.telee.springform;
 
 import com.badlogic.gdx.Gdx;
 
-class Key extends DefaultInterface{
+public class Key extends DefaultInterface{
 	  
 	  //private boolean[] state;
 	  
@@ -20,7 +20,7 @@ class Key extends DefaultInterface{
 	    }
 	  }*/
 	  
-	  static boolean Down(int key) {
+	  public static boolean Down(int key) {
 		  return Gdx.input.isKeyPressed(key);
 	  }
 	    /*if (! TextEnter) {

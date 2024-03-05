@@ -15,13 +15,14 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.telee.springform.pointer.Pointer;
 
 
 public class Desktop {
 	//Main Object List
 	private static ObjectList objs;
-	static TreeMap<LayerName,Layer> layers;
-	static ArrayList<Camera> cams;
+	public static TreeMap<LayerName,Layer> layers;
+	public static ArrayList<Camera> cams;
 	
 	//Tools for vista interaction
 	static VistaSaver vistaSaver;
@@ -31,7 +32,7 @@ public class Desktop {
 	
 	//Object References
 	public static Pointer pointer;
-	static Camera cam;
+	public static Camera cam;
 	
 	//Physics
 	public static World pworld;
@@ -99,7 +100,7 @@ public class Desktop {
 				
 				o.update();
 				
-				if (o.y < -10)
+				if (o.y < -10 && o != pointer)
 					o.remove();
 				
 				if (breakLoop)

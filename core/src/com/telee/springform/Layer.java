@@ -6,23 +6,38 @@ import com.badlogic.gdx.math.Vector3;
 public class Layer extends DefaultInterface{
 	
 	ObjectList objs;
-	short collisionGroup;
+	public short collisionGroup;
 	LayerName name;
+	int index;
 	
 	Texture background;
 	
-	Layer(LayerName n) {
+	Layer() {
 		super();
+		objs = new ObjectList();
+	}
+	
+	Layer(LayerName n) {
+		this();
 		name = n;
 		collisionGroup = (short) (name.ordinal()+1);
-		
-		objs = new ObjectList();
 		
 		if (name == LayerName.backdrop) {
 			background = new Texture("textures/backdrops/lxde_blue.jpg");
 		}
 	}
 	
+	Layer(int i) {
+		this();
+		index = i;
+		collisionGroup = (short) (i+1);
+		
+		if (Layers.at(index) == Layers.backdrop) {
+			background = new Texture("textures/backdrops/lxde_blue.jpg");
+		}
+	}
+	
+
 	public void draw() {
 		Render.reset();
 		if (background != null) {

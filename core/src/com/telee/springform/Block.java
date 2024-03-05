@@ -1,5 +1,8 @@
 package com.telee.springform;
 
+import com.telee.springform.components.PhysicsBody;
+import com.telee.springform.components.Sprite;
+
 public class Block extends GameObject{
 
     public Block() {}

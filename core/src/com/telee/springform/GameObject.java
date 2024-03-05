@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
+import com.telee.springform.components.PhysicsBody;
+import com.telee.springform.components.Sprite;
 import com.badlogic.gdx.utils.JsonValue;
 
 public class GameObject extends DefaultInterface implements Serializable{
@@ -17,22 +19,22 @@ public class GameObject extends DefaultInterface implements Serializable{
 	protected float angle;
 	
 	//Data
-	String name;
+	protected String name;
 	
 	public float vx;
 	public float vy;
 	
-	T facing;
+	public T facing;
 	
 	/** Remove Flag */
-	private boolean remove;
+	protected boolean remove;
 	/** Do not save objects with this flag */
-	boolean noSave;
+	protected boolean noSave;
 	/** Object is invisible */
-	boolean hidden;
+	protected boolean hidden;
 	
 	//Components
-	Sprite sprite;
+	protected Sprite sprite;
 	public PhysicsBody body;
 	/*Particle_Emitter aura;
 	Eblock_Controller guide;*/
@@ -106,6 +108,12 @@ public class GameObject extends DefaultInterface implements Serializable{
 	
 	//Update method
 	public void update() {
+		if (body.box != null) {
+			x = body.box.getPosition().x;
+			y = body.box.getPosition().y;
+			angle = (float) Math.toDegrees(body.box.getAngle());
+		}
+		
 		if (body != null) {body.update();}
 		if (sprite != null) {sprite.update();}
 		/* if (aura != null) {aura.update();}
@@ -135,9 +143,9 @@ public class GameObject extends DefaultInterface implements Serializable{
 	
 	public float getX () {return x;}
 	public float getY () {return y;}
-	public float getRotation () {return angle;}
+	public float getAngle () {return angle;}
 
-	void setPosition(float x, float y) {
+	protected void setPosition(float x, float y) {
 		if (body != null) {
 			body.setPosition(x, y);
 		}
@@ -146,7 +154,7 @@ public class GameObject extends DefaultInterface implements Serializable{
 		this.y = y;
 	}
 	
-	void setAngle(float a) {
+	protected void setAngle(float a) {
 		if (body != null) {
 			body.setAngle(a);
 		}
@@ -157,7 +165,7 @@ public class GameObject extends DefaultInterface implements Serializable{
 	public float getWidth () {return w;}
 	public float getHeight () {return h;}
 	
-	void scaledSpriteRatio (float scale) {
+	protected void scaledSpriteRatio (float scale) {
 		w = (sprite.tw/sprite.th)*scale;
 		h = 1*scale;
 		

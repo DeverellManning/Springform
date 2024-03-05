@@ -19,7 +19,7 @@ public class Camera extends GameObject {
 		cam.viewportHeight = Gdx.graphics.getHeight();
 		cam.viewportWidth = Gdx.graphics.getWidth();
 	}
-	void transform() {
+	public void transform() {
 		cam.update();
 		Render.sprite.setProjectionMatrix(cam.combined);
 		Render.shape.setProjectionMatrix(cam.combined);

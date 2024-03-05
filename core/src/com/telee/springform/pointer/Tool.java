@@ -1,6 +1,8 @@
-package com.telee.springform.tools;
+package com.telee.springform.pointer;
 
 import com.telee.springform.*;
+import com.telee.springform.components.GameComponent;
+import com.telee.springform.components.Sprite;
 
 public abstract class Tool extends GameComponent{
 	Sprite sprite;

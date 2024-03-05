@@ -6,6 +6,8 @@ import java.nio.charset.Charset;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.telee.springform.components.PhysicsBody;
+import com.telee.springform.components.Sprite;
 
 public class VistaGenerator {
 

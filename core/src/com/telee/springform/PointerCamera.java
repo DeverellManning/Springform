@@ -6,7 +6,7 @@ public class PointerCamera extends Camera {
 	GameObject target;
 	float border;
 	
-	PointerCamera(GameObject _target) {
+	public PointerCamera(GameObject _target) {
 		super(0,0);
 		
 		zoom=0.03125f;

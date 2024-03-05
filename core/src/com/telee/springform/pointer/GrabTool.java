@@ -1,4 +1,4 @@
-package com.telee.springform.tools;
+package com.telee.springform.pointer;
 
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Joint;
@@ -6,8 +6,8 @@ import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 import com.telee.springform.Desktop;
 import com.telee.springform.GameObject;
-import com.telee.springform.PhysicsBody;
-import com.telee.springform.Sprite;
+import com.telee.springform.components.PhysicsBody;
+import com.telee.springform.components.Sprite;
 
 public class GrabTool extends Tool {
 	GameObject grabbed;
@@ -29,7 +29,12 @@ public class GrabTool extends Tool {
 
 	@Override
 	public void update() {
+		
 		if (grabbed != null) {
+			if (grabbed.doRemove() == true || grabbed.body.box == null) {
+				joint = null;
+				return;
+			}
 			grabbed.body.box.setAwake(true);
 		}
 
@@ -47,7 +52,7 @@ public class GrabTool extends Tool {
 		jointDef.bodyA = grabbed.body.box;
 		jointDef.bodyB = parent.body.box;
 		jointDef.dampingRatio = 0.0f;
-		jointDef.frequencyHz = 60f;
+		jointDef.frequencyHz = 0.25f;
 		
 		//jointDef.maxForce = 2 * Math.min(first.body.box.getMass(), 1f) * 10000;
 		joint = Desktop.pworld.createJoint(jointDef);

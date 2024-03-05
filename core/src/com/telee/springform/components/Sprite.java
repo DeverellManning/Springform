@@ -1,8 +1,11 @@
-package com.telee.springform;
+package com.telee.springform.components;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
+import com.telee.springform.Key;
+import com.telee.springform.Render;
+import com.telee.springform.T;
 
 public class Sprite extends GameComponent {
 	Texture texture;
@@ -11,8 +14,8 @@ public class Sprite extends GameComponent {
 	float scale;
 	float w, h;
 	int frameCount, cframe;
-	float tw = 0;
-	float th = 0;
+	public float tw = 0;
+	public float th = 0;
 	
 	/** Zero parameter constructor for loading from json */
 	Sprite() {
@@ -45,8 +48,8 @@ public class Sprite extends GameComponent {
 	}
 	
 	public void setup() {
-		this.w = parent.w;
-		this.h = parent.h;
+		this.w = parent.getWidth();
+		this.h = parent.getHeight();
 	}
 	
 	public void draw() {

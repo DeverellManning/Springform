@@ -1,17 +1,15 @@
-package com.telee.springform;
+package com.telee.springform.components;
 
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 
+import com.telee.springform.Desktop;
+import com.telee.springform.T;
+
+
 public class PhysicsBody extends GameComponent{
-	T shape;
+	public T shape;
 	public T type;
 	float width, height;
 	Boolean support, touching;
@@ -21,8 +19,8 @@ public class PhysicsBody extends GameComponent{
 	public Body box;
 	
 	PhysicsBody() {
-		friction = 0.4f;
-		restitution = 0.2f;
+		friction = 0.6f;
+		restitution = 0.3f;
 		allLayers = false;
 	}
 	
@@ -41,7 +39,7 @@ public class PhysicsBody extends GameComponent{
 		init();
 	}
 	
-	PhysicsBody(T _type, T _shape) {
+	public PhysicsBody(T _type, T _shape) {
 		this();
 		this.shape = _shape;
 		this.type = _type;
@@ -49,7 +47,7 @@ public class PhysicsBody extends GameComponent{
 		height = 1;
 	}
 	
-	PhysicsBody(T _type, T _shape, boolean _allLayers) {
+	public PhysicsBody(T _type, T _shape, boolean _allLayers) {
 		this(_type, _shape);
 		allLayers = _allLayers;
 	}
@@ -62,8 +60,8 @@ public class PhysicsBody extends GameComponent{
 		BodyDef def = new BodyDef();
 		Shape shape;
 		
-		width = parent.w;
-		height = parent.h;
+		width = parent.getWidth();
+		height = parent.getHeight();
 
 		switch (type) {
 		case CT_STATIC:
@@ -92,14 +90,14 @@ public class PhysicsBody extends GameComponent{
 		
 		
 		box = Desktop.pworld.createBody(def);
-		box.setTransform(parent.x, parent.y, parent.angle);
+		box.setTransform(parent.getX(), parent.getY(), parent.getAngle());
 		
 		Fixture f = box.createFixture(shape, 1);
 		f.setFriction(friction);
 		f.setRestitution(restitution);
 		
 		Filter filter = new Filter();
-		filter.groupIndex = Desktop.layers.get(parent.layer).collisionGroup;
+		filter.groupIndex = Desktop.layers.get(parent.getLayer()).collisionGroup;
 		filter.maskBits = 0x1000;
 		filter.categoryBits = 0x0001;
 		if (allLayers) {
@@ -121,16 +119,9 @@ public class PhysicsBody extends GameComponent{
 	public void update() {
 		support = false;
 		touching = false;
-		
-		if (box != null) {
-			parent.x = box.getPosition().x;
-			parent.y = box.getPosition().y;
-			parent.angle = (float) Math.toDegrees(box.getAngle());
-		}
-		
 	}
 	
-	void remove() {
+	public void remove() {
 		box.getWorld().destroyBody(box);
 	}
 	

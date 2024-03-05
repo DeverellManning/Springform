@@ -2,6 +2,9 @@ package com.telee.springform;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.QueryCallback;
+import com.telee.springform.components.PhysicsBody;
 
 /** Static Utility class */
 public final class Util {
@@ -63,4 +66,15 @@ public final class Util {
 		
 		return path;
 	}
+	
+	private static QueryCallback getFirstCallback = new QueryCallback () {
+		public boolean reportFixture(Fixture f) {
+			GameObject o = ((PhysicsBody) f.getBody().getUserData()).parent;
+			if (o == Desktop.pointer) return true;
+			//grabbed = o;
+			return false;
+		}
+	};
+	
+	//GameObject getFirst()
 }

@@ -1,9 +1,10 @@
-package com.telee.springform.tools;
+package com.telee.springform.pointer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 import com.telee.springform.*;
+import com.telee.springform.components.Sprite;
 
 public class CreateTool extends Tool {
 	

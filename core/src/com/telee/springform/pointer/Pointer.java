@@ -1,15 +1,22 @@
-package com.telee.springform;
+package com.telee.springform.pointer;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Quaternion;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.MassData;
-import com.badlogic.gdx.physics.box2d.QueryCallback;
-import com.telee.springform.tools.*;
+import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.physics.box2d.*;
+
+import com.telee.springform.Desktop;
+import com.telee.springform.GameObject;
+import com.telee.springform.Icon;
+import com.telee.springform.Key;
+import com.telee.springform.LayerName;
+import com.telee.springform.PointerCamera;
+import com.telee.springform.Render;
+import com.telee.springform.T;
+import com.telee.springform.Util;
+import com.telee.springform.components.PhysicsBody;
+import com.telee.springform.components.Sprite;
 
 public class Pointer extends GameObject {
 	PointerCamera selfie;
@@ -19,7 +26,7 @@ public class Pointer extends GameObject {
 	
 	Tool tool;
 	
-	Pointer() {
+	public Pointer() {
 		super(0, 15, new Sprite("./assets/textures/pointers/arrow.png", 1),
 				new PhysicsBody(T.CT_STATIC, T.CS_AABB));
 		
@@ -114,19 +121,19 @@ public class Pointer extends GameObject {
 		
 	}
 	
-	void mouseScrolled(float amt) {
+	public void mouseScrolled(float amt) {
 		Util.log("Scrolled: " + amt);
 		if (amt > 0) {tool = new GrabTool(""); setup();};
 		if (amt < 0) {tool = new CreateTool(); setup();};
 	}
 	
-	void mouseDown(int button) {
+	public void mouseDown(int button) {
 		if (button == Buttons.LEFT) {
 			tool.press();
 		}
 	}
 	
-	void mouseUp(int button) {
+	public void mouseUp(int button) {
 		if (button == Buttons.LEFT) {
 			tool.release();
 		}
