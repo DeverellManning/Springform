@@ -1,5 +1,7 @@
 package com.telee.springform.pointer;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
@@ -11,6 +13,7 @@ import com.telee.springform.GameObject;
 import com.telee.springform.Icon;
 import com.telee.springform.Key;
 import com.telee.springform.LayerName;
+import com.telee.springform.ObjectList;
 import com.telee.springform.PointerCamera;
 import com.telee.springform.Render;
 import com.telee.springform.T;
@@ -24,7 +27,9 @@ public class Pointer extends GameObject {
 	
 	QueryCallback onclick;
 	
+	ArrayList<Tool> tools;
 	Tool tool;
+	int toolIndex;
 	
 	public Pointer() {
 		super(0, 15, new Sprite("./assets/textures/pointers/arrow.png", 1),
@@ -38,8 +43,13 @@ public class Pointer extends GameObject {
 		
 		scaledSpriteRatio(0.5f);
 		
-		tool = new CreateTool();
-
+		tools = new ArrayList<Tool>();
+		tools.add(new CreateTool());
+		tools.add(new GrabTool(""));
+		tools.add(new DestroyTool());
+		tools.add(new PointerTool());
+		toolIndex = 0;
+		
 		setup();
 		
 		speed = 0.24f;
@@ -81,6 +91,13 @@ public class Pointer extends GameObject {
 			tool.setParent(this);
 			tool.setup();
 		}
+		
+		if (tools == null) return;
+		
+		for (Tool t : tools) {
+			t.setParent(this);
+			t.setup();
+		}
 
 	}
 	
@@ -116,26 +133,31 @@ public class Pointer extends GameObject {
 			//Desktop.add(new Block(x, y));
 		}
 		
-		tool.update();
+		tools.get(toolIndex).update();
 		
 		
 	}
 	
 	public void mouseScrolled(float amt) {
 		Util.log("Scrolled: " + amt);
-		if (amt > 0) {tool = new GrabTool(""); setup();};
-		if (amt < 0) {tool = new CreateTool(); setup();};
+		//if (amt > 0) {tool = new GrabTool(""); setup();};
+		//if (amt < 0) {tool = new CreateTool(); setup();};
+		//tool = tools.get(tools.indexOf(tool)+1);
+		toolIndex = (int) (toolIndex + amt);
+		if (toolIndex > tools.size()-1) toolIndex = 0;
+		if (toolIndex < 0) toolIndex = tools.size()-1;
+		
 	}
 	
 	public void mouseDown(int button) {
 		if (button == Buttons.LEFT) {
-			tool.press();
+			tools.get(toolIndex).press();
 		}
 	}
 	
 	public void mouseUp(int button) {
 		if (button == Buttons.LEFT) {
-			tool.release();
+			tools.get(toolIndex).release();
 		}
 	}
 	
@@ -145,19 +167,20 @@ public class Pointer extends GameObject {
 		transform.rotate(new Quaternion().set(new Vector3(0, 0, 1), angle));
 		Render.sprite.setTransformMatrix(transform);
 		
-		if (tool != null) {
-			tool.draw();
+		if (tools.get(toolIndex) != null) {
+			tools.get(toolIndex).draw();
 		} else {
-			
+			if (sprite != null) {sprite.draw();}
 		}
-		if (sprite != null) {sprite.draw();}
 		if(Key.Down(Keys.SHIFT_LEFT) && Key.Down(Keys.NUM_1)) {
 			Render.shape.circle(0, 0, 4);
 		}
+		
+		Render.text("HELLO WORLD - 12345", 0, 0);
 
 	}
 	
-	void remove() {
+	public void remove() {
 		
 	}
 	

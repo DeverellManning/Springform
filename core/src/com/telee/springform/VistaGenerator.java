@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.telee.springform.components.PhysicsBody;
@@ -23,9 +26,27 @@ public class VistaGenerator {
 				continue;
 			
 			String ext = f.extension();
-			if (! ext.contentEquals("desktop"))
-				continue;
 			
+			if (! ext.contentEquals("desktop")) {
+				String icon="./assets/textures/objects/filetype/file.png";
+				String exec = "";
+				
+				if (ext.matches("txt")) {
+					icon="./assets/textures/objects/filetype/text.png";
+				} else if (ext.matches("sh")) {
+					icon="./assets/textures/objects/filetype/script.png";
+					exec=f.path();
+				} else if (ext.matches("png|jpg")) {
+					icon="./assets/textures/objects/filetype/image.png";
+				} else if (ext.matches("mp3")) {
+					icon="./assets/textures/objects/filetype/audio.png";
+				}
+				Util.log("Name: " + f.name() + " Icon: " + icon);
+				
+				Desktop.add(new Icon((float) Math.random()*50-25, (float) Math.random()*10+2, exec, icon));
+				continue;
+			}
+					
 			CharBuffer content = CharBuffer.allocate(1000);
 			try {
 				f.reader(Charset.defaultCharset().name()).read(content);
@@ -52,7 +73,7 @@ public class VistaGenerator {
 				}
 			}
 			
-			icon = Util.locateIcon(icon, "/usr/share/icons/gnome/16x16/categories/applications-other.png");
+			icon = Util.locateIcon(icon, "/usr/share/icons/gnome/32x32/categories/applications-other.png");
 			Util.log("Exec: " + exec + ", Icon: " + icon);
 			
 			Desktop.add(new Icon((float) Math.random()*50-25, (float) Math.random()*10+2, exec, icon));
@@ -66,7 +87,7 @@ public class VistaGenerator {
         	}
         	
         	if (Math.random() > 0.8) {
-        		Desktop.add(new GameObject(i*2, 0, new Sprite("textures/bush.png", 0.9f), new PhysicsBody(T.CT_STATIC, T.CS_AABB)));
+        		Desktop.add(new GameObject(i*2, 0, LayerName.back, new Sprite("textures/bush.png", 0.9f), null));
         	}
         }
 	}

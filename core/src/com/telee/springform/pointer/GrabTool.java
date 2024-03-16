@@ -25,6 +25,8 @@ public class GrabTool extends Tool {
 	public GrabTool(String name) {
 		super(name);
 		grabbed = null;
+		
+		sprite = new Sprite("./assets/textures/tools/hand1.png", 0.5f);
 	}
 
 	@Override
@@ -61,7 +63,7 @@ public class GrabTool extends Tool {
 	public void release() {
 		if (joint != null) Desktop.pworld.destroyJoint(joint);
 		joint = null;
-		if (grabbed != null) grabbed.body.box.applyForceToCenter(parent.vx, parent.vy, true);
+		if (grabbed != null) grabbed.body.box.applyForceToCenter(0, -50, true);
 	}
 
 }

@@ -3,6 +3,7 @@ package com.telee.springform;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.SerializationException;
 
 public class VistaLoader {
 
@@ -25,7 +26,13 @@ public class VistaLoader {
 		objs.clear();
 		
 		Json json = new Json();
-		objs = json.fromJson(ObjectList.class, objectJson);
+		try {
+			objs = json.fromJson(ObjectList.class, objectJson);
+		} catch (SerializationException ex) {
+			Util.log(ex.getMessage());
+			Util.log(ex.getStackTrace().toString());
+			objs.clear();
+		}
 		
 	}
 }

@@ -39,7 +39,7 @@ public class GameObject extends DefaultInterface implements Serializable{
 	/*Particle_Emitter aura;
 	Eblock_Controller guide;*/
 	
-	GameObject() {
+	protected GameObject() {
 		super();
 		x = 0;
 		y = 0;
@@ -89,7 +89,7 @@ public class GameObject extends DefaultInterface implements Serializable{
 	
 	//After Constructor setup
 	public void setup() {
-		Util.log("w: " + w + "h: " + h);
+		//Util.log("w: " + w + "h: " + h);
 		if (sprite != null) {
 			sprite.setParent(this);
 			sprite.setup();
@@ -108,7 +108,7 @@ public class GameObject extends DefaultInterface implements Serializable{
 	
 	//Update method
 	public void update() {
-		if (body.box != null) {
+		if (body != null) {
 			x = body.box.getPosition().x;
 			y = body.box.getPosition().y;
 			angle = (float) Math.toDegrees(body.box.getAngle());
@@ -136,7 +136,7 @@ public class GameObject extends DefaultInterface implements Serializable{
 	}
 
 	public boolean doRemove() {return remove;}
-	void remove() {
+	public void remove() {
 		if (body != null) body.remove();
 		remove = true;
 	}

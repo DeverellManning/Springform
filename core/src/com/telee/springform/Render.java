@@ -1,10 +1,14 @@
 package com.telee.springform;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.*;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.*;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -30,9 +34,23 @@ public class Render {
 		
 		assets = new AssetManager();
 		
+		FileHandleResolver resolver = new InternalFileHandleResolver();
+		assets.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
+		assets.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
+
+		FreeTypeFontLoaderParameter arial10 = new FreeTypeFontLoaderParameter();
+
+		// This is the file that needs to exist in the assets directory.
+		arial10.fontFileName = "./assets/fonts/PatrickHand-Regular.ttf";
+		arial10.fontParameters.size = 40;
+
+		// There is no file named arial10.ttf. This is just an identifier for the asset manager.
+		// The .ttf extension is important, because it tells the asset manager which loader to use.
+		assets.load("patrick10.ttf", BitmapFont.class, arial10);
+		assets.finishLoading();
 		
 		
-		bfont = new BitmapFont();
+		bfont = assets.get("patrick10.ttf", BitmapFont.class);
 		
 		lstyle = new Label.LabelStyle(bfont, new Color());
 		l = new Label("", lstyle);
@@ -61,10 +79,10 @@ public class Render {
 		shape.setProjectionMatrix(identity);
 	}
 	
-	static void text(String t, int x, int y) {
+	public static void text(String t, int x, int y) {
 		l.setText(t);
 		l.setPosition(x, y);
-		//l.draw(sprite, 1.0f);
+		l.draw(sprite, 1.0f);
 	}
 
 	public static void resize(int x, int y) {

@@ -3,11 +3,13 @@ package com.telee.springform;
 import java.io.IOException;
 
 import com.badlogic.gdx.physics.box2d.MassData;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.telee.springform.components.PhysicsBody;
 import com.telee.springform.components.Sprite;
 
 public class Icon extends GameObject {
-	String exec;
+	public String exec;
 	Process proc;
 	
 	public Icon() {
@@ -17,8 +19,10 @@ public class Icon extends GameObject {
 	public Icon(float _x, float _y, String command, String icon) {
 		super(_x, _y, LayerName.main, new Sprite(icon, 1), new PhysicsBody(T.CT_DYNAMIC, T.CS_AABB));
 		
-		w = 1;
-		h = 1;
+		//w = 1;
+		//h = 1;
+		
+		scaledSpriteRatio(1);
 		
 		//MassData m = new MassData();
 		//m.mass = 10000;
@@ -33,7 +37,18 @@ public class Icon extends GameObject {
 		
 		if (proc != null) {
 			try {
-				proc.getInputStream().read();
+				int ci = proc.getInputStream().read();
+				if (ci > -1) {
+					String out = "";
+					do {
+						ci = proc.getInputStream().read();
+						
+						out = out.concat(new Character((char) ci).toString());
+						Util.log(new Character((char) ci).toString());
+					} while (ci != -1);
+					Util.log(out);
+				}
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -52,6 +67,17 @@ public class Icon extends GameObject {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void write(Json json) {
+		super.write(json);
+		json.writeValue("exec", exec);
+		
+	}
+	
+	public void read(Json json, JsonValue jsonData) {
+		super.read(json, jsonData);
+		exec = jsonData.getString("exec", "");
 	}
 
 }
