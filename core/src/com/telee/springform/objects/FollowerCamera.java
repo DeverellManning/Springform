@@ -1,6 +1,8 @@
-package com.telee.springform;
+package com.telee.springform.objects;
 
 import com.badlogic.gdx.Input;
+import com.telee.springform.GameObject;
+import com.telee.springform.Key;
 
 public class FollowerCamera extends Camera {
 		GameObject target;
@@ -14,8 +16,8 @@ public class FollowerCamera extends Camera {
 			//x = Math.round(target.x - Render.hvasX);
 			//y = Math.round(-target.y - Render.hvasY);
 			
-			x = target.x;
-			y = -target.y;
+			x = target.getX();
+			y = -target.getY();
 			
 			if (Key.Down(Input.Keys.E)) { // e - zoom in
 				this.zoom -= zoom/10;

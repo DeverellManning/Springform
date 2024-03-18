@@ -49,7 +49,7 @@ public class Layer extends DefaultInterface{
 		for (int i = objs.size()-1; i >= 0; i--) {
 			GameObject c = objs.get(i);
 			Vector3 screenPos = Desktop.cam.cam.project(new Vector3(c.x, c.y, 0f));
-			if (screenPos.x > Render.vasX+c.w*32 || screenPos.x < -c.h*32) {continue;}
+			if (screenPos.x > Render.vasX+c.w*32 || screenPos.x < -c.w*32) {continue;}
 			if (screenPos.y > Render.vasY+c.h*32 || screenPos.y < -c.h*32) {continue;}
 			if (c.hidden) {continue;}
 			

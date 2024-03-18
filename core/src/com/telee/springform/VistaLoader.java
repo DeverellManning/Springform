@@ -17,8 +17,6 @@ public class VistaLoader {
 	}
 
 	public void readObjectList(String path) {
-		//FileHandle dirdle = Gdx.files.absolute(path);
-		
 		FileHandle objectJson = dataDir.child("/meta-fs" + path + "/objects.json");
 		if (! objectJson.exists())
 			return;
@@ -29,8 +27,9 @@ public class VistaLoader {
 		try {
 			objs = json.fromJson(ObjectList.class, objectJson);
 		} catch (SerializationException ex) {
+			Util.log("Failed to load object list: " + path);
 			Util.log(ex.getMessage());
-			Util.log(ex.getStackTrace().toString());
+			ex.printStackTrace();
 			objs.clear();
 		}
 		

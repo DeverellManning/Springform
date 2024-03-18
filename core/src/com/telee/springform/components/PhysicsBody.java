@@ -11,10 +11,11 @@ import com.telee.springform.T;
 public class PhysicsBody extends GameComponent{
 	public T shape;
 	public T type;
+	boolean allLayers;
+	
 	float width, height;
 	Boolean support, touching;
 	float friction, restitution;
-	boolean allLayers;
 	
 	public Body box;
 	
@@ -109,9 +110,6 @@ public class PhysicsBody extends GameComponent{
 		box.setUserData(this);
 
 		shape.dispose();
-		
-		
-		
 	}
 	
 
@@ -131,19 +129,20 @@ public class PhysicsBody extends GameComponent{
 
 	public void setAngle(float a) {
 		box.setTransform(box.getPosition(), a);
-		
 	}
 	
 	@Override
 	public void write(Json json) {
 		json.writeValue("shape", shape);
 		json.writeValue("type", type);
+		json.writeValue("allLayers", allLayers);
 		
 	}
 	@Override
 	public void read(Json json, JsonValue jsonData) {
 		shape = json.readValue(T.class, jsonData.get("shape"));
 		type = json.readValue(T.class, jsonData.get("type"));
+		allLayers = jsonData.getBoolean("allLayers", false);
 	}
 	
 }

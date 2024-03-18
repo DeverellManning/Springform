@@ -1,9 +1,10 @@
-package com.telee.springform;
+package com.telee.springform.objects;
 
 import com.badlogic.gdx.Input;
+import com.telee.springform.Key;
 
 public class DroneCamera extends Camera {
-	DroneCamera(float _x, float _y) {
+	public DroneCamera(float _x, float _y) {
 		super(_x, _y);
 		this.speed = 6f;
 	}

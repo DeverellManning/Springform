@@ -15,6 +15,8 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.telee.springform.objects.Camera;
+import com.telee.springform.objects.DroneCamera;
 import com.telee.springform.pointer.Pointer;
 
 
@@ -100,7 +102,7 @@ public class Desktop {
 				
 				o.update();
 				
-				if (o.y < -10 && o != pointer)
+				if (o.y < -100 && o != pointer)
 					o.remove();
 				
 				if (breakLoop)
@@ -151,10 +153,10 @@ public class Desktop {
 		if (Key.Down(Input.Keys.V))
 			drawpworld.render(pworld, cam.cam.combined);
 	
-		if (Key.Down(Keys.SHIFT_LEFT)) {
+		/*if (Key.Down(Keys.SHIFT_LEFT)) {
 			Render.shape.setColor(Color.FIREBRICK.r, Color.FIREBRICK.g, Color.FIREBRICK.b, 0.5f);
 			Render.shape.rect(mx-32,my-32, 64, 64);
-		}
+		}*/
 	}
 	
 	static void save() {

@@ -15,7 +15,7 @@ public class VistaSaver {
 	public void writeObjectList(ObjectList objs, String path) {
 		Json json = new Json();
 		String jobjs = json.toJson(objs);
-		Util.log(json.prettyPrint(jobjs));
+		//Util.log(json.prettyPrint(jobjs));
 		
 		//Check path
 		if (! Gdx.files.absolute(path).isDirectory()) {

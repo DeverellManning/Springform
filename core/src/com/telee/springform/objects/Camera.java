@@ -1,12 +1,14 @@
-package com.telee.springform;
+package com.telee.springform.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.telee.springform.GameObject;
+import com.telee.springform.Render;
 
 public class Camera extends GameObject {
 	float zoom, speed;
 	
-	OrthographicCamera cam;
+	public OrthographicCamera cam;
 		
 	Camera(float _x, float _y) {
 		super();

@@ -20,6 +20,7 @@ public class GameObject extends DefaultInterface implements Serializable{
 	
 	//Data
 	protected String name;
+	protected long age;
 	
 	public float vx;
 	public float vy;
@@ -47,6 +48,7 @@ public class GameObject extends DefaultInterface implements Serializable{
 		h = 1;
 		vx = 0;
 		vy = 0;
+		age=0;
 		layer = LayerName.main;
 		facing = T.D_LEFT;
 		
@@ -108,17 +110,19 @@ public class GameObject extends DefaultInterface implements Serializable{
 	
 	//Update method
 	public void update() {
+		age++;
 		if (body != null) {
 			x = body.box.getPosition().x;
 			y = body.box.getPosition().y;
 			angle = (float) Math.toDegrees(body.box.getAngle());
+			vx = body.box.getLinearVelocity().x;
+			vy = body.box.getLinearVelocity().y;
 		}
 		
 		if (body != null) {body.update();}
 		if (sprite != null) {sprite.update();}
-		/* if (aura != null) {aura.update();}
-		if (guide != null) {guide.update();}
-		*/
+		//if (aura != null) {aura.update();}
+		//if (guide != null) {guide.update();}
 	}
 	
 	//Draw Method
@@ -158,7 +162,6 @@ public class GameObject extends DefaultInterface implements Serializable{
 		if (body != null) {
 			body.setAngle(a);
 		}
-		
 		this.angle = a;
 	}
 	
@@ -168,7 +171,6 @@ public class GameObject extends DefaultInterface implements Serializable{
 	protected void scaledSpriteRatio (float scale) {
 		w = (sprite.tw/sprite.th)*scale;
 		h = 1*scale;
-		
 	}
 	
 	public void snap() {
@@ -178,6 +180,7 @@ public class GameObject extends DefaultInterface implements Serializable{
 	}
 	
 	public LayerName getLayer () {return layer;}
+	public long getAge () {return age;}
 	
 	
 	/* Serializable Interface */

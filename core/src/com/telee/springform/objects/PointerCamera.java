@@ -1,6 +1,9 @@
-package com.telee.springform;
+package com.telee.springform.objects;
 
 import com.badlogic.gdx.Input;
+import com.telee.springform.GameObject;
+import com.telee.springform.Key;
+import com.telee.springform.Render;
 
 public class PointerCamera extends Camera {
 	GameObject target;
@@ -14,14 +17,14 @@ public class PointerCamera extends Camera {
 		target = _target;
 		border = 0.06f;
 		
-		x = target.x;
-		y = -target.y;
+		x = target.getX();
+		y = -target.getY();
 	}
 	
 	public void update() {
 		super.update();
-		float tx = target.x;
-		float ty = -target.y;
+		float tx = target.getX();
+		float ty = -target.getY();
 		
 		//Render.text(Float.toString(zoom), 40, 50);
 		

@@ -1,5 +1,7 @@
-package com.telee.springform;
+package com.telee.springform.objects;
 
+import com.telee.springform.GameObject;
+import com.telee.springform.T;
 import com.telee.springform.components.PhysicsBody;
 import com.telee.springform.components.Sprite;
 

@@ -9,8 +9,11 @@ import javax.activation.MimeTypeParseException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.telee.springform.components.PhysicsBody;
 import com.telee.springform.components.Sprite;
+import com.telee.springform.objects.Icon;
 
 public class VistaGenerator {
 
@@ -31,14 +34,14 @@ public class VistaGenerator {
 				String icon="./assets/textures/objects/filetype/file.png";
 				String exec = "";
 				
-				if (ext.matches("txt")) {
+				if (ext.matches("txt|c|css|h|cpp|java|hpp|js")) {
 					icon="./assets/textures/objects/filetype/text.png";
 				} else if (ext.matches("sh")) {
 					icon="./assets/textures/objects/filetype/script.png";
 					exec=f.path();
 				} else if (ext.matches("png|jpg")) {
 					icon="./assets/textures/objects/filetype/image.png";
-				} else if (ext.matches("mp3")) {
+				} else if (ext.matches("mp3|wav")) {
 					icon="./assets/textures/objects/filetype/audio.png";
 				}
 				Util.log("Name: " + f.name() + " Icon: " + icon);
@@ -81,10 +84,18 @@ public class VistaGenerator {
 		
 		Desktop.add(new GameObject(-10, 20, LayerName.front, new Sprite("textures/Enemy.png", 0.9f), new PhysicsBody(T.CT_DYNAMIC, T.CS_AABB)));
 		
+		GameObject ground = new GameObject(new Vector2(0, -60), new Vector2(1000, 60), LayerName.main, "textures/ground.png");
+		PhysicsBody groundBody = new PhysicsBody(T.CT_STATIC, T.CS_CIRCLE, true);
+		ground.body = groundBody;
+		ground.setup();
+		
+		Desktop.add(ground);
         for (int i = -100; i<100;i++) {
-        	for (int d = -2; d>-13; d=d-2) {
+        	/*for (int d = -2; d>-13; d=d-2) {
         		Desktop.add(new Block(i*2, d));
-        	}
+        	}*/
+        	
+        	//Desktop.add(new GameObject())
         	
         	if (Math.random() > 0.8) {
         		Desktop.add(new GameObject(i*2, 0, LayerName.back, new Sprite("textures/bush.png", 0.9f), null));

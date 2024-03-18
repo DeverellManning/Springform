@@ -10,16 +10,16 @@ import com.badlogic.gdx.physics.box2d.*;
 
 import com.telee.springform.Desktop;
 import com.telee.springform.GameObject;
-import com.telee.springform.Icon;
 import com.telee.springform.Key;
 import com.telee.springform.LayerName;
 import com.telee.springform.ObjectList;
-import com.telee.springform.PointerCamera;
 import com.telee.springform.Render;
 import com.telee.springform.T;
 import com.telee.springform.Util;
 import com.telee.springform.components.PhysicsBody;
 import com.telee.springform.components.Sprite;
+import com.telee.springform.objects.Icon;
+import com.telee.springform.objects.PointerCamera;
 
 public class Pointer extends GameObject {
 	PointerCamera selfie;
@@ -48,6 +48,7 @@ public class Pointer extends GameObject {
 		tools.add(new GrabTool(""));
 		tools.add(new DestroyTool());
 		tools.add(new PointerTool());
+		tools.add(new RocketTool());
 		toolIndex = 0;
 		
 		setup();
@@ -70,18 +71,6 @@ public class Pointer extends GameObject {
 		Desktop.cams.add(selfie);
 		Desktop.cam = Desktop.cams.get(Desktop.cams.size()-1);
 		
-		onclick = new QueryCallback () {
-			public boolean reportFixture(Fixture f) {
-				GameObject o = ((PhysicsBody) f.getBody().getUserData()).parent;
-				//((PhysicsBody) f.getBody().getUserData()).parent.remove();
-				if (o != null && o.getClass() == Icon.class) {
-					((Icon) o).execute();
-				}
-				return false;
-			}
-		};
-		
-
 	}
 	
 	public void setup() {
@@ -112,13 +101,9 @@ public class Pointer extends GameObject {
 		
 		//Vector2 boxPos = body.box.getPosition();
 		//body.box.applyLinearImpulse(100*(x - boxPos.x), 100*(y - boxPos.y), x, y, true);
-		
 		//body.box.applyLinearImpulse(	Gdx.input.getDeltaX()*speed, -Gdx.input.getDeltaY()*speed);
 		
-		
-		//if (Gdx.input.getX() > Render.vasX-2) {
 		Gdx.input.setCursorPosition(Render.hvasX, Render.hvasY);
-		//}
 		
 		//if (body != null) {body.update();}
 		if (sprite != null) {sprite.update();}
@@ -126,23 +111,13 @@ public class Pointer extends GameObject {
 		//body.box.applyLinearImpulse(-Gdx.input.getDeltaX()*speed, Gdx.input.getDeltaY()*speed, 0, 0, true);
 		//body.box.applyForceToCenter(-Gdx.input.getDeltaX()*speed, Gdx.input.getDeltaY()*speed, true);
 		
-		
-		
-		if (Gdx.input.justTouched()) {
-			//Desktop.pworld.QueryAABB(onclick, x, y, x, y);
-			//Desktop.add(new Block(x, y));
-		}
-		
 		tools.get(toolIndex).update();
 		
 		
 	}
 	
 	public void mouseScrolled(float amt) {
-		Util.log("Scrolled: " + amt);
-		//if (amt > 0) {tool = new GrabTool(""); setup();};
-		//if (amt < 0) {tool = new CreateTool(); setup();};
-		//tool = tools.get(tools.indexOf(tool)+1);
+		//Util.log("Scrolled: " + amt);
 		toolIndex = (int) (toolIndex + amt);
 		if (toolIndex > tools.size()-1) toolIndex = 0;
 		if (toolIndex < 0) toolIndex = tools.size()-1;
@@ -176,6 +151,8 @@ public class Pointer extends GameObject {
 			Render.shape.circle(0, 0, 4);
 		}
 		
+		transform.scale(1/32f, 1/32f, 1f);
+		Render.sprite.setTransformMatrix(transform);
 		Render.text("HELLO WORLD - 12345", 0, 0);
 
 	}
