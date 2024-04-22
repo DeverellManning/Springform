@@ -1,5 +1,7 @@
 package com.telee.springform.objects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.telee.springform.GameObject;
 import com.telee.springform.T;
@@ -25,7 +27,7 @@ public class Rocket extends GameObject {
 	
 	public void update() {
 		super.update();
-		if (age < 200) {
+		if (age < 200 || Gdx.input.isKeyPressed(Input.Keys.R)) {
 			body.box.applyForceToCenter(0, age*age*10, true);
 			Util.log(age + " - " + age*age*10 + " - " + body.box.getLinearVelocity().y);
 		}

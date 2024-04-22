@@ -18,6 +18,9 @@ public class Sprite extends GameComponent {
 	public float tw = 0;
 	public float th = 0;
 	
+	public boolean stretch = true;
+	
+	
 	
 	
 	/** Zero parameter constructor for loading from json */
@@ -50,6 +53,12 @@ public class Sprite extends GameComponent {
 		this.th = texture.getHeight();
 	}
 	
+	public Sprite(String _texture, boolean _stretch) {
+		this(_texture, 64);
+		
+		stretch = _stretch;
+	}
+	
 	public void setup() {
 		w = parent.getWidth();
 		h = parent.getHeight();
@@ -68,20 +77,22 @@ public class Sprite extends GameComponent {
 		//fill(T.C_YELLOW);
 		//rect(0,0,this.tw*this.scale, this.th*this.scale);
 		} else {
-			/*if(parent.facing == T.D_LEFT) {
-				Render.sprite.draw(texture, -w, -h, w*2f, h*2f,
-						0, 0, (int) tw, (int) th, false, false);
+			if (stretch) {
+				if(parent.facing == T.D_LEFT) {
+					Render.sprite.draw(texture, -w, -h, w*2f, h*2f,
+							0, 0, (int) tw, (int) th, false, false);
+				} else {
+					Render.sprite.draw(texture, -w, -h, w*2f, h*2f,
+							0, 0, (int) tw, (int) th, true, false);
+				}
 			} else {
-				Render.sprite.draw(texture, -w, -h, w*2f, h*2f,
-						0, 0, (int) tw, (int) th, true, false);
-			}*/
-			
-			if(parent.facing == T.D_LEFT) {
-				Render.sprite.draw(texture, -w, -h, w*2f, h*2f,
-						0, 0, Math.round(w*64), Math.round(h*64), false, false);
-			} else {
-				Render.sprite.draw(texture, -w, -h, w*2f, h*2f,
-						0, 0, Math.round(w*64), Math.round(h*64), true, false);
+				if(parent.facing == T.D_LEFT) {
+					Render.sprite.draw(texture, -w, -h, w*2f, h*2f,
+							0, 0, Math.round(w*64), Math.round(h*64), false, false);
+				} else {
+					Render.sprite.draw(texture, -w, -h, w*2f, h*2f,
+							0, 0, Math.round(w*64), Math.round(h*64), true, false);
+				}
 			}
 			
 			

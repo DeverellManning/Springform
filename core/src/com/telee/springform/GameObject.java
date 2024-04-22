@@ -35,7 +35,7 @@ public class GameObject extends DefaultInterface implements Serializable{
 	protected boolean hidden;
 	
 	//Components
-	protected Sprite sprite;
+	public Sprite sprite;
 	public PhysicsBody body;
 	/*Particle_Emitter aura;
 	Eblock_Controller guide;*/
@@ -225,6 +225,10 @@ public class GameObject extends DefaultInterface implements Serializable{
 		body = json.readValue(PhysicsBody.class, jsonData.get("body"));
 		
 		setup();
+	}
+
+	public String getName() {
+		return name;
 	}
 	
 }

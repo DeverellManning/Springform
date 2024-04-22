@@ -153,7 +153,11 @@ public class Pointer extends GameObject {
 		
 		transform.scale(1/32f, 1/32f, 1f);
 		Render.sprite.setTransformMatrix(transform);
-		Render.text("HELLO WORLD - 12345", 0, 0);
+		if (tools.get(toolIndex) != null && tools.get(toolIndex).floatText != null) {
+			Render.text(tools.get(toolIndex).floatText, 10, 10);
+			
+		}
+		
 
 	}
 	

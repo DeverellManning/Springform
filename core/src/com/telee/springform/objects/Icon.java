@@ -46,7 +46,7 @@ public class Icon extends GameObject {
 	public void update() {
 		super.update();
 		
-		if (proc != null && ! proc.isAlive()) {
+		if (running == true && proc != null && ! proc.isAlive()) {
 			Util.log("Proccess Ended: " + exec + ", code: " + proc.exitValue());
 			running = false;
 		}

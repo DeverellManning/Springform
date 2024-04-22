@@ -36,17 +36,20 @@ public class VistaGenerator {
 				
 				if (ext.matches("txt|c|css|h|cpp|java|hpp|js")) {
 					icon="./assets/textures/objects/filetype/text.png";
+					exec="mousepad " + f.path();
 				} else if (ext.matches("sh")) {
 					icon="./assets/textures/objects/filetype/script.png";
 					exec=f.path();
 				} else if (ext.matches("png|jpg")) {
 					icon="./assets/textures/objects/filetype/image.png";
+					exec="gpicview " + f.path();
 				} else if (ext.matches("mp3|wav")) {
 					icon="./assets/textures/objects/filetype/audio.png";
 				}
 				Util.log("Name: " + f.name() + " Icon: " + icon);
-				
-				Desktop.add(new Icon((float) Math.random()*50-25, (float) Math.random()*10+2, exec, icon));
+				Icon i = new Icon((float) Math.random()*50-25, (float) Math.random()*10+2, exec, icon);
+				i.name = f.name();
+				Desktop.add(i);
 				continue;
 			}
 					
@@ -79,12 +82,16 @@ public class VistaGenerator {
 			icon = Util.locateIcon(icon, "/usr/share/icons/gnome/32x32/categories/applications-other.png");
 			Util.log("Exec: " + exec + ", Icon: " + icon);
 			
-			Desktop.add(new Icon((float) Math.random()*50-25, (float) Math.random()*10+2, exec, icon));
+			Icon i = new Icon((float) Math.random()*50-25, (float) Math.random()*10+2, exec, icon);
+			i.name = f.name();
+			Desktop.add(i);
 		}
 		
-		Desktop.add(new GameObject(-10, 20, LayerName.front, new Sprite("textures/Enemy.png", 0.9f), new PhysicsBody(T.CT_DYNAMIC, T.CS_AABB)));
+		Desktop.add(new GameObject(-10, 20, LayerName.front, new Sprite("./assets/textures/objects/Enemy.png", 0.9f), new PhysicsBody(T.CT_DYNAMIC, T.CS_AABB)));
 		
-		GameObject ground = new GameObject(new Vector2(0, -60), new Vector2(1000, 60), LayerName.main, "textures/ground.png");
+		GameObject ground = new GameObject(new Vector2(0, -60), new Vector2(1000, 60), LayerName.main, "./assets/textures/material/ground.png");
+		ground.sprite.stretch = false;
+		ground.body.remove();
 		PhysicsBody groundBody = new PhysicsBody(T.CT_STATIC, T.CS_CIRCLE, true);
 		ground.body = groundBody;
 		ground.setup();
@@ -98,7 +105,7 @@ public class VistaGenerator {
         	//Desktop.add(new GameObject())
         	
         	if (Math.random() > 0.8) {
-        		Desktop.add(new GameObject(i*2, 0, LayerName.back, new Sprite("textures/bush.png", 0.9f), null));
+        		Desktop.add(new GameObject(i*2, 0, LayerName.back, new Sprite("./assets/textures/objects/bush.png", 0.9f), null));
         	}
         }
 	}

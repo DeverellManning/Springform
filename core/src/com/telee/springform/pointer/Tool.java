@@ -6,10 +6,10 @@ import com.telee.springform.components.Sprite;
 
 public abstract class Tool extends GameObject {
 	//Sprite sprite;
-	
-	float w, h;
 
 	protected GameObject parent;
+	
+	public String floatText;
 	
 	public Tool(String image) {
 		super();
@@ -23,9 +23,10 @@ public abstract class Tool extends GameObject {
 	
 	public void setup() {
 		if (sprite != null) {
-			sprite.setParent(this);
-			Util.log("" + sprite.tw);
+			scaledSpriteRatio(sprite.th/64);
 		}
+		
+		super.setup();
 	}
 	
 	public void press() {}

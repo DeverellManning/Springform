@@ -43,7 +43,8 @@ public class Render {
 
 		// This is the file that needs to exist in the assets directory.
 		arial10.fontFileName = "./assets/fonts/PatrickHand-Regular.ttf";
-		arial10.fontParameters.size = 40;
+		arial10.fontParameters.size = 30;
+		arial10.fontParameters.borderWidth = 3;
 
 		// There is no file named arial10.ttf. This is just an identifier for the asset manager.
 		// The .ttf extension is important, because it tells the asset manager which loader to use.
@@ -79,6 +80,7 @@ public class Render {
 
 	public static void text(String t, int x, int y) {
 		bfont.draw(sprite, t, y, x);
+		
 	}
 
 	public static void resize(int x, int y) {

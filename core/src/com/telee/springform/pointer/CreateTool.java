@@ -88,7 +88,8 @@ public class CreateTool extends Tool {
 				size.y = 0.5f;
 			}
 			
-			GameObject o = new GameObject(origin, size, LayerName.main, "textures/ground.png");
+			GameObject o = new GameObject(origin, size, LayerName.main, "./assets/textures/material/ground.png");
+			o.sprite.stretch = false;
 			
 			Desktop.add(o);
 			state = State.origin;
